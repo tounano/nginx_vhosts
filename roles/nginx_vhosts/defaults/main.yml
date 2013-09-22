@@ -1,0 +1,29 @@
+---
+# file: roles/nginx_vhosts/defaults/main.yml
+
+# Path config
+nginx_sites_available:  /etc/nginx/sites-available
+nginx_sites_enabled:    /etc/nginx/sites-enabled
+
+# Nginx site and Php-pool common config
+user: www-data
+php_pool: default
+
+# Nginx site required values
+site_name:
+server_name:
+
+# Nginx site optional values
+listen: 80
+index: index.html index.php
+  
+# php pool default values
+pm_type:              ondemand
+pm_max_requests:      50
+pm_max_children:      5
+pm_start_servers:     2
+pm_min_spare_servers: 1
+pm_max_spare_servers: 3
+
+request_terminate_timeout: 30s
+request_slowlog_timeout: 10s

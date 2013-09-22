@@ -1,0 +1,12 @@
+---
+# file: host_vars/localhost
+vhosts:
+  - site_name:    test-site1.com
+    server_name:  test-site1.com www.test-site1.com
+    php_pool: testpool
+    
+  - site_name:    greatsite.com
+    server_name:  www.greatsite.com greatsite.com
+    
+php_pools:
+  - name: testpool

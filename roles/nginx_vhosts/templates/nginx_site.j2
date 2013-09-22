@@ -1,0 +1,35 @@
+{% set site_name         = item.site_name %}
+{% set user         = item.user|default("{{ user }}") %}
+{% set php_pool     = item.php_pool|default("{{ php_pool }}") %}
+{% set server_name  = item.server_name %}
+{% set listen       = item.listen|default("{{ listen }}") %}
+{% set index        = item.index|default("{{ index }}") %}
+server {
+    listen      {{ listen }};
+    server_name {{ server_name }};
+    root        /home/{{ user }}/{{ site_name }}/public;
+    index       {{ index }};
+
+    access_log  /home/{{ user }}/{{ site_name }}/logs/access.log;
+    error_log   /home/{{ user }}/{{ site_name }}/logs/error.log;
+
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico)$ {
+        expires max;
+        log_not_found off;
+    }
+
+    location ~ \.php$
+    {
+        fastcgi_pass unix:/var/run/php5-fpm.{{ user }}.{{ php_pool }}.sock;
+        fastcgi_index index.php;
+        try_files $uri =404;
+        fastcgi_split_path_info ^((?U).+\.php)(/?.+)$;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+        fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;
+
+        fastcgi_param PHP_VALUE error_log=$document_root/error_log;
+
+        include /etc/nginx/fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_path_info$fastcgi_script_name;
+    }
+}

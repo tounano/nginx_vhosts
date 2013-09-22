@@ -1,0 +1,35 @@
+[{{ user }}.{{ php_pool }}]
+    listen                  = /var/run/php5-fpm.{{ user }}.{{ php_pool }}.sock
+    listen.backlog          = -1
+    listen.allowed_clients  = 127.0.0.1
+    listen.owner            = {{ user }}
+    listen.group            = {{ user }}
+    listen.mode             = 0666
+
+    user  = {{ user }}
+    group = {{ user }}
+
+    pm                   = {{ pm_type }}
+    pm.max_requests      = {{ pm_max_requests }}
+    pm.max_children      = {{ pm_max_children }}
+    pm.start_servers     = {{ pm_start_servers }}
+    pm.min_spare_servers = {{ pm_min_spare_servers }}
+    pm.max_spare_servers = {{ pm_max_spare_servers }}
+
+    pm.status_path       = /{{ php_pool }}_status
+    ping.path            = /{{ php_pool }}ping
+    ping.response        = {{ php_pool }}_pong
+
+    request_terminate_timeout = {{ request_terminate_timeout }}
+    request_slowlog_timeout   = {{ request_slowlog_timeout }}
+
+    catch_workers_output = yes
+
+    env[HOSTNAME] = $HOSTNAME
+    env[TMP]      = /tmp
+    env[TMPDIR]   = /tmp
+    env[TEMP]     = /tmp
+
+    php_admin_value[error_log]          = error_log
+    php_admin_flag[log_errors]          = on
+    php_admin_value[error_reporting]    = E_ALL & ~E_NOTICE & ~E_DEPRECATED

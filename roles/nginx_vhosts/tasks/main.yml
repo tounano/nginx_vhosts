@@ -1,0 +1,11 @@
+---
+# file: roles/nginx_vhosts/tasks/main.yml
+
+#- name: ensure user exists
+#- name: ensure pool exists
+#- name: ensure site directory exists with permissions
+- name: ensure nginx vhost exists
+  template: src=nginx_site.j2 dest={{ nginx_sites_available }}/{{ item.site_name }}
+  with_items: vhosts
+
+#- name: ensure nginx vhost is enabled
